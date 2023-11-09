@@ -8,6 +8,7 @@ export default function page() {
       <div className="w-2/3">
         <Image
           className="w-full rounded-xl aspect-video"
+          priority
           height={490}
           width={870}
           src={`/blogs/blog.png`}

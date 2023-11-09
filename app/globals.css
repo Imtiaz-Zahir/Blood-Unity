@@ -5,3 +5,7 @@
 .scroll {
     box-shadow: 0 1rem 2rem #0003
 }
+
+.boxShadow{
+    box-shadow: 3px 2px 19px #7e7979
+}
