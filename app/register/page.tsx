@@ -1,41 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-
-type Location = {
-  division: string;
-  district: string;
-  upazila: string;
-};
-
-
-function useLocation(location: Location) {
-  const [locationList, setLocationList] = useState({
-    division: [],
-    district: [],
-    upazila: [],
-  });
-  useEffect(() => {
-    fetch("/api/divisions",{cache:"force-cache"})
-      .then((res) => res.json())
-      .then((data) => setLocationList({ ...locationList, division: data }))
-      .catch(console.log);
-    if (location.division) {
-      fetch(`/api/districts?division=${location.division}`)
-        .then((res) => res.json())
-        .then((data) => setLocationList({ ...locationList, district: data }))
-        .catch(console.log);
-    }
-    if (location.district) {
-      fetch(`/api/upazilas?district=${location.district}`)
-        .then((res) => res.json())
-        .then((data) => setLocationList({ ...locationList, upazila: data }))
-        .catch(console.log);
-    }
-  }, [location]);
-
-  return locationList;
-}
+import useLocation from "@/hooks/useLocation";
 
 export default function Page() {
   const [show, setShow] = useState(false);
@@ -44,31 +10,8 @@ export default function Page() {
     district: "",
     upazila: "",
   });
-  // const [locationList, setLocationList] = useState({
-  //   division: [],
-  //   district: [],
-  //   upazila: [],
-  // });
-
-  // useEffect(() => {
-  //   fetch("/api/divisions")
-  //     .then((res) => res.json())
-  //     .then((data) => setLocationList({ ...locationList, division: data }))
-  //     .catch(console.log);
-  //   if (location.division) {
-  //     fetch(`/api/districts?division=${location.division}`)
-  //       .then((res) => res.json())
-  //       .then((data) => setLocationList({ ...locationList, district: data }))
-  //       .catch(console.log);
-  //   }
-  //   if (location.district) {
-  //     fetch(`/api/upazilas?district=${location.district}`)
-  //       .then((res) => res.json())
-  //       .then((data) => setLocationList({ ...locationList, upazila: data }))
-  //       .catch(console.log);
-  //   }
-  // }, [location]);
-  const locationList = useLocation(location);
+  
+  const {divisions,districts,upazilas} = useLocation(location);   //custom hook
 
   return (
     <section className="px-4 sm:px-8 md:px-16 lg:px-28 py-20 flex justify-center">
@@ -140,7 +83,7 @@ export default function Page() {
               <option value="" className="hidden">
                 Select Your Division
               </option>
-              {locationList.division.map(({ _id, name }, index) => (
+              {divisions.map(({ _id, name }, index) => (
                 <option key={index} value={_id}>
                   {name}
                 </option>
@@ -165,7 +108,7 @@ export default function Page() {
                   ? "Select Your District"
                   : "Select Your Division First"}
               </option>
-              {locationList.district.map(({ _id, name }, index) => (
+              {districts.map(({ _id, name }, index) => (
                 <option key={index} value={_id}>
                   {name}
                 </option>
@@ -190,7 +133,7 @@ export default function Page() {
                   ? "Select Your Upzila"
                   : "Select Your District First"}
               </option>
-              {locationList.district.map(({ _id, name }, index) => (
+              {upazilas.map(({ _id, name }, index) => (
                 <option key={index} value={_id}>
                   {name}
                 </option>

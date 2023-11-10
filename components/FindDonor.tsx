@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import useLocation from "@/hooks/useLocation";
 
 type Divition = {
   _id: string;
@@ -7,27 +8,14 @@ type Divition = {
   bn_name: string;
 };
 
-export default function FindDonor({ divisions }: { divisions: Divition[] }) {
+export default function FindDonor() {
   const [location, setLocation] = useState({
     division: "",
     district: "",
     upazila: "",
   });
-  const [districts, setDistricts] = useState([]);
-  const [upazilas, setUpazilas] = useState([]);
 
-  useEffect(()=>{
-    if(location.division){
-      fetch(`/api/districts?division=${location.division}`)
-      .then((res) => res.json())
-      .then((data) => setDistricts(data));
-    }
-    if(location.district){
-        fetch(`/api/upazilas?district=${location.district}`)
-        .then((res) => res.json())
-        .then((data) => setUpazilas(data));
-    }
-  },[location])
+  const { divisions, districts, upazilas } = useLocation(location); //custom hook
 
   return (
     <form>
@@ -56,7 +44,7 @@ export default function FindDonor({ divisions }: { divisions: Divition[] }) {
         }
       >
         <option className="hidden" value="0">
-          {districts.length === 0 ? "Select Divition First" : "Select District"}
+          {location.division ? "Select District" : "Select Divition First"}
         </option>
         {districts.map(({ _id, name }, index) => (
           <option key={index} value={_id}>
@@ -72,7 +60,7 @@ export default function FindDonor({ divisions }: { divisions: Divition[] }) {
         }
       >
         <option className="hidden" value="0">
-          {districts.length === 0 ? "Select District First" : "Select Uppazila"}
+          {location.district ? "Select Uppazila" : "Select District First"}
         </option>
         {upazilas.map(({ _id, name }, index) => (
           <option key={index} value={_id}>
