@@ -5,10 +5,10 @@ import { NextRequest } from "next/server";
 export async function GET(req: NextRequest) {
   const url = req.url as string;
   const index = url?.indexOf("=");
-  if (index === -1) return Response.json([]);
+  if (index === -1) return new Response(JSON.stringify({message:"Invalid request"}), { status: 400 });
 
   const districtId = url?.slice(index + 1);
-  if (!districtId) return Response.json([]);
+  if (!districtId) return new Response(JSON.stringify({message:"Invalid request"}), { status: 400 });
 
   try {
     await connectToDB();
@@ -16,6 +16,11 @@ export async function GET(req: NextRequest) {
     return Response.json(districts);
   } catch (error) {
     console.log(error);
-    return Response.json([]);
+    return new Response(
+      JSON.stringify({ message: "Something went wrong try again later" }),
+      {
+        status: 500,
+      }
+    );
   }
 }

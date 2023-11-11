@@ -1,18 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import useSelectLocation from "@/hooks/useSelectLocation";
-
-type UserInput = {
-  name: any;
-  number: any;
-  blood: any;
-  division: any;
-  district: any;
-  upazila: any;
-  password: any;
-  password_confirm: any;
-};
+import useSelectLocation from "@/customFunctions/useSelectLocation";
+import checkInput from "@/customFunctions/checkInput";
 
 export default function Page() {
   const [show, setShow] = useState(false);
@@ -24,35 +14,6 @@ export default function Page() {
     districts,
     upazilas,
   } = useSelectLocation(); //custom hook
-
-  function checkInput(data: UserInput) {
-    if (
-      !(
-        data.name &&
-        data.blood &&
-        data.division &&
-        data.district &&
-        data.upazila &&
-        data.password &&
-        data.password_confirm
-      )
-    ) {
-      setErr("Please fill all the fields");
-      return false;
-    } else {
-      if (data.password === data.password_confirm) {
-        if (data.password.length >= 6 && data.password.length <= 20) {
-          return true;
-        } else {
-          setErr("Password must be at least 6 characters");
-          return false;
-        }
-      } else {
-        setErr("Password and Confirm Password not match");
-        return false;
-      }
-    }
-  }
 
   function handleSubmit(e: any) {
     e.preventDefault();
@@ -68,25 +29,27 @@ export default function Page() {
       password: form.pass.value,
       password_confirm: form.password_confirm.value,
     };
-    console.log(data);
 
-    // if (checkInput(data)) {
-    //   fetch("/api/register", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(data),
-    //   }).then(async (res) => {
-    //     const data = await res.json();
-    //     console.log(data);
-    //     if (res.status === 200) {
-    //       window.location.href = "/login";
-    //     } else {
-    //       setErr(data.message);
-    //     }
-    //   }).catch(()=>setErr("Something went wrong"))
-    // }
+    if (checkInput(data, (msg) => setErr(msg))) {
+      fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then(async (res) => {
+          const data = await res.json();
+          if (res.status === 201) {
+            alert(data.message);
+            form.reset();
+            window.location.href = "/login";
+          } else {
+            setErr(data.message);
+          }
+        })
+        .catch(() => setErr("Something went wrong try again later"));
+    }
   }
 
   return (

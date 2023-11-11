@@ -4,6 +4,13 @@ import Link from "next/link";
 
 export default function Page() {
   const [show, setShow] = useState(false);
+
+  async function handleSubmit(e: any) {
+    e.preventDefault();
+    const form = e.target;
+    
+  }
+
   return (
     <section className="px-4 sm:px-8 md:px-16 lg:px-28 py-20 flex justify-center">
       <div className="p-4 sm:p-6 md:p-8 lg:p-12 lg:w-2/5 rounded-xl boxShadow">
@@ -13,7 +20,7 @@ export default function Page() {
             Email and Password are not valid
           </p>
         ) : null} */}
-        <form>
+        <form onSubmit={handleSubmit}>
           <input
             className="w-full border border-slate-400 h-12 p-2 my-2 rounded-md"
             type="text"

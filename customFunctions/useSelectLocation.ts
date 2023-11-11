@@ -19,17 +19,13 @@ export default function useSelectLocation() {
       .then((data) => setLocationList({ ...locationList, divisions: data }))
       .catch(console.log);
     if (selectedLocation.division) {
-      fetch(`/api/districts?division=${selectedLocation.division}`, {
-        cache: "force-cache",
-      })
+      fetch(`/api/districts?division=${selectedLocation.division}`)
         .then((res) => res.json())
         .then((data) => setLocationList({ ...locationList, districts: data }))
         .catch(console.log);
     }
     if (selectedLocation.district) {
-      fetch(`/api/upazilas?district=${selectedLocation.district}`, {
-        cache: "force-cache",
-      })
+      fetch(`/api/upazilas?district=${selectedLocation.district}`)
         .then((res) => res.json())
         .then((data) => setLocationList({ ...locationList, upazilas: data }))
         .catch(console.log);

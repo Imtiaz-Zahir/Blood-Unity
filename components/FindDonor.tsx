@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import useSelectLocation from "@/hooks/useSelectLocation";
+import useSelectLocation from "@/customFunctions/useSelectLocation";
 
 export default function FindDonor() {
   const {
