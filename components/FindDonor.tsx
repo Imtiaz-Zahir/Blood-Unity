@@ -1,30 +1,25 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import useLocation from "@/hooks/useLocation";
-
-type Divition = {
-  _id: string;
-  name: string;
-  bn_name: string;
-};
+import React from "react";
+import useSelectLocation from "@/hooks/useSelectLocation";
 
 export default function FindDonor() {
-  const [location, setLocation] = useState({
-    division: "",
-    district: "",
-    upazila: "",
-  });
-
-  const { divisions, districts, upazilas } = useLocation(location); //custom hook
+  const {
+    selectedLocation,
+    setSelectedLocation,
+    divisions,
+    districts,
+    upazilas,
+  } = useSelectLocation(); //custom hook
 
   return (
-    <form>
+    <form className="flex flex-col lg:flex-row items-center justify-center gap-5 text-xl font-semibold p-20">
       <select
         name="divition"
-        className="px-3 py-1 border"
+        className="py-3 px-5 border-2 border-black rounded"
         onChange={(e) =>
-          setLocation((prev) => ({ ...prev, division: e.target.value }))
+          setSelectedLocation((prev) => ({ ...prev, division: e.target.value,district:"",upazila:"" }))
         }
+        value={selectedLocation.division}
         required
       >
         <option className="hidden" value="0">
@@ -38,13 +33,14 @@ export default function FindDonor() {
       </select>
       <select
         name="district"
-        className="px-3 py-1 border"
+        className="py-3 px-5 border-2 border-black rounded"
         onChange={(e) =>
-          setLocation((prev) => ({ ...prev, district: e.target.value }))
+          setSelectedLocation((prev) => ({ ...prev, district: e.target.value,upazila:"" }))
         }
+        value={selectedLocation.district}
       >
         <option className="hidden" value="0">
-          {location.division ? "Select District" : "Select Divition First"}
+          {selectedLocation.division ? "Select District" : "Select Divition First"}
         </option>
         {districts.map(({ _id, name }, index) => (
           <option key={index} value={_id}>
@@ -54,13 +50,14 @@ export default function FindDonor() {
       </select>
       <select
         name="upazila"
-        className="px-3 py-1 border"
+        className="py-3 px-5 border-2 border-black rounded"
         onChange={(e) =>
-          setLocation((prev) => ({ ...prev, upazila: e.target.value }))
+          setSelectedLocation((prev) => ({ ...prev, upazila: e.target.value }))
         }
+        value={selectedLocation.upazila}
       >
         <option className="hidden" value="0">
-          {location.district ? "Select Uppazila" : "Select District First"}
+          {selectedLocation.district ? "Select Uppazila" : "Select District First"}
         </option>
         {upazilas.map(({ _id, name }, index) => (
           <option key={index} value={_id}>
@@ -68,6 +65,23 @@ export default function FindDonor() {
           </option>
         ))}
       </select>
+
+      <button
+        type="submit"
+        className="py-3 px-5 bg-red-600 hover:bg-blue-900 transition-all text-white rounded uppercase font-semibold flex gap-2 items-center justify-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          className="w-4"
+        >
+          <path
+            fill="#fff"
+            d="M21.71,20.29,18,16.61A9,9,0,1,0,16.61,18l3.68,3.68a1,1,0,0,0,1.42,0A1,1,0,0,0,21.71,20.29ZM11,18a7,7,0,1,1,7-7A7,7,0,0,1,11,18Z"
+          ></path>
+        </svg>
+        Find Donors
+      </button>
     </form>
   );
 }

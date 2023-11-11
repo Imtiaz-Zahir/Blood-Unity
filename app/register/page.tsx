@@ -1,23 +1,99 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import useLocation from "@/hooks/useLocation";
+import useSelectLocation from "@/hooks/useSelectLocation";
+
+type UserInput = {
+  name: any;
+  number: any;
+  blood: any;
+  division: any;
+  district: any;
+  upazila: any;
+  password: any;
+  password_confirm: any;
+};
 
 export default function Page() {
   const [show, setShow] = useState(false);
-  const [location, setLocation] = useState({
-    division: "",
-    district: "",
-    upazila: "",
-  });
-  
-  const {divisions,districts,upazilas} = useLocation(location);   //custom hook
+  const [err, setErr] = useState("");
+  const {
+    selectedLocation,
+    setSelectedLocation,
+    divisions,
+    districts,
+    upazilas,
+  } = useSelectLocation(); //custom hook
+
+  function checkInput(data: UserInput) {
+    if (
+      !(
+        data.name &&
+        data.blood &&
+        data.division &&
+        data.district &&
+        data.upazila &&
+        data.password &&
+        data.password_confirm
+      )
+    ) {
+      setErr("Please fill all the fields");
+      return false;
+    } else {
+      if (data.password === data.password_confirm) {
+        if (data.password.length >= 6 && data.password.length <= 20) {
+          return true;
+        } else {
+          setErr("Password must be at least 6 characters");
+          return false;
+        }
+      } else {
+        setErr("Password and Confirm Password not match");
+        return false;
+      }
+    }
+  }
+
+  function handleSubmit(e: any) {
+    e.preventDefault();
+    setErr("");
+    const form = e.target;
+    const data = {
+      name: form.name.value,
+      number: form.number.value,
+      blood: form.blood.value,
+      division: form.division.value,
+      district: form.district.value,
+      upazila: form.upazila.value,
+      password: form.pass.value,
+      password_confirm: form.password_confirm.value,
+    };
+    console.log(data);
+
+    // if (checkInput(data)) {
+    //   fetch("/api/register", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(data),
+    //   }).then(async (res) => {
+    //     const data = await res.json();
+    //     console.log(data);
+    //     if (res.status === 200) {
+    //       window.location.href = "/login";
+    //     } else {
+    //       setErr(data.message);
+    //     }
+    //   }).catch(()=>setErr("Something went wrong"))
+    // }
+  }
 
   return (
     <section className="px-4 sm:px-8 md:px-16 lg:px-28 py-20 flex justify-center">
       <div className="p-4 sm:p-6 md:p-8 lg:p-12 lg:w-2/5 rounded-xl boxShadow">
         <h1 className="text-3xl font-bold my-6">Hello, Welcome !</h1>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="my-4">
             <label className="my-2 text-xl font-semibold" htmlFor="name">
               Name :
@@ -73,11 +149,17 @@ export default function Page() {
             </label>
             <br />
             <select
+              value={selectedLocation.division}
               name="division"
               className="border border-slate-400 bg-white h-14 p-2 my-2 rounded-md font-semibold text-lg w-full"
               required
               onChange={(e) =>
-                setLocation({ ...location, division: e.target.value })
+                setSelectedLocation((prev) => ({
+                  ...prev,
+                  division: e.target.value,
+                  district: "",
+                  upazila: "",
+                }))
               }
             >
               <option value="" className="hidden">
@@ -96,15 +178,20 @@ export default function Page() {
             </label>
             <br />
             <select
+              value={selectedLocation.district}
               name="district"
               className="border border-slate-400 bg-white h-14 p-2 my-2 rounded-md font-semibold text-lg w-full"
               required
               onChange={(e) =>
-                setLocation({ ...location, district: e.target.value })
+                setSelectedLocation((prev) => ({
+                  ...prev,
+                  district: e.target.value,
+                  upazila: "",
+                }))
               }
             >
               <option value="" className="hidden">
-                {location.division
+                {selectedLocation.division
                   ? "Select Your District"
                   : "Select Your Division First"}
               </option>
@@ -121,15 +208,19 @@ export default function Page() {
             </label>
             <br />
             <select
+              value={selectedLocation.upazila}
               name="upazila"
               className="border border-slate-400 bg-white h-14 p-2 my-2 rounded-md font-semibold text-lg w-full"
               required
               onChange={(e) =>
-                setLocation({ ...location, district: e.target.value })
+                setSelectedLocation((prev) => ({
+                  ...prev,
+                  upazila: e.target.value,
+                }))
               }
             >
               <option value="" className="hidden">
-                {location.division
+                {selectedLocation.district
                   ? "Select Your Upzila"
                   : "Select Your District First"}
               </option>
@@ -201,6 +292,7 @@ export default function Page() {
               </svg>
             </div>
           </div>
+          <p className="text-red-500 text-lg font-bold">{err}</p>
           <div className="my-4 flex justify-between items-center">
             <button
               type="submit"
@@ -219,7 +311,6 @@ export default function Page() {
             </p>
           </div>
         </form>
-        {/* <p className="text-red-600 text-lg font-bold">{err}</p> */}
       </div>
     </section>
   );

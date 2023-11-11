@@ -7,6 +7,7 @@ const userSchema = new Schema({
     },
     phone:{
         type:Number,
+        unique:true,
         required:[true,"Phone number is required"]
     },
     bloodGroup:{
@@ -14,16 +15,31 @@ const userSchema = new Schema({
         required:[true,"Blood group is required"],
         enum:["A+","A-","B+","B-","O+","O-","AB+","AB-"]
     },
-    address:{
-        type:String,
-        required:[true,"Address is required"]
+    division:{
+        type:Schema.Types.ObjectId,
+        ref:"Division",
+        required:[true,"Division is required"],
+    },
+    district:{
+        type:Schema.Types.ObjectId,
+        ref:"District",
+        required:[true,"District is required"]
+    },
+    upazila:{
+        type:Schema.Types.ObjectId,
+        ref:"Upazila",
+        required:[true,"Upazila is required"]
     },
     type:{
         type:String,
         enum:["admin","user"],
         default:"user"
+    },
+    varyfied:{
+        type:Boolean,
+        default:false
     }
-})
+},{timestamps:true})
 
 const User = models.User || model("User",userSchema)
 

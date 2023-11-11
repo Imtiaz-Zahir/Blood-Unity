@@ -1,35 +1,40 @@
 import { useEffect, useState } from "react";
 
-type Location = {
-  division: string;
-  district: string;
-  upazila: string;
-};
+export default function useSelectLocation() {
+  const [selectedLocation, setSelectedLocation] = useState({
+    division: "",
+    district: "",
+    upazila: "",
+  });
 
-export default function useLocation(location: Location) {
   const [locationList, setLocationList] = useState({
     divisions: [],
     districts: [],
     upazilas: [],
   });
+
   useEffect(() => {
     fetch("/api/divisions", { cache: "force-cache" })
       .then((res) => res.json())
       .then((data) => setLocationList({ ...locationList, divisions: data }))
       .catch(console.log);
-    if (location.division) {
-      fetch(`/api/districts?division=${location.division}`)
+    if (selectedLocation.division) {
+      fetch(`/api/districts?division=${selectedLocation.division}`, {
+        cache: "force-cache",
+      })
         .then((res) => res.json())
         .then((data) => setLocationList({ ...locationList, districts: data }))
         .catch(console.log);
     }
-    if (location.district) {
-      fetch(`/api/upazilas?district=${location.district}`)
+    if (selectedLocation.district) {
+      fetch(`/api/upazilas?district=${selectedLocation.district}`, {
+        cache: "force-cache",
+      })
         .then((res) => res.json())
         .then((data) => setLocationList({ ...locationList, upazilas: data }))
         .catch(console.log);
     }
-  }, [location]);
+  }, [selectedLocation]);
 
-  return locationList;
+  return { selectedLocation, setSelectedLocation, ...locationList };
 }
