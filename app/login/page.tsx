@@ -1,25 +1,46 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import { checkLoginInput } from "@/customFunctions/checkInput";
 
 export default function Page() {
   const [show, setShow] = useState(false);
+  const [err, setErr] = useState("");
 
   async function handleSubmit(e: any) {
     e.preventDefault();
+    setErr("");
     const form = e.target;
-    
+    const data = { number: form.number.value, password: form.password.value };
+    if (checkLoginInput(data, (err) => setErr(err))) {
+      try {
+        fetch("/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }).then(async (res) => {
+          const data = await res.json();
+          if (res.status === 200) {
+            form.reset();
+            window.location.href = "/profile";
+          } else {
+            setErr(data.message);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+        setErr("Something went wrong try again later");
+      }
+    }
   }
 
   return (
     <section className="px-4 sm:px-8 md:px-16 lg:px-28 py-20 flex justify-center">
       <div className="p-4 sm:p-6 md:p-8 lg:p-12 lg:w-2/5 rounded-xl boxShadow">
         <h1 className="text-3xl font-bold my-6">Hi, Welcome back!</h1>
-        {/* {err ? (
-          <p className="text-red-600 text-lg font-bold">
-            Email and Password are not valid
-          </p>
-        ) : null} */}
+        <p className="text-red-600 text-lg font-bold">{err}</p>
         <form onSubmit={handleSubmit}>
           <input
             className="w-full border border-slate-400 h-12 p-2 my-2 rounded-md"
@@ -72,7 +93,7 @@ export default function Page() {
           <p className="text-center text-lg font-medium mt-2">
             Forget Passowrd?
             <Link
-              href="/forget"
+              href="/recover"
               className="font-medium hover:text-blue-900 text-red-600 transition-all mx-2"
             >
               Recover Now

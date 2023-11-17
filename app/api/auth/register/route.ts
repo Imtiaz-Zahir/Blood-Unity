@@ -1,22 +1,26 @@
 import { NextRequest } from "next/server";
-import checkInput from "@/customFunctions/checkInput";
+import { checkRegisterInput } from "@/customFunctions/checkInput";
 import { connectToDB } from "@/database/connection";
 import User from "@/models/user";
-import { genSalt, hash } from "bcrypt";
+import generateToken from "@/customFunctions/generateToken";
+import hashPassword from "@/customFunctions/generateToken";
 
 export async function POST(req: NextRequest) {
   const userData = await req.json();
   let errMsg: string = "";
 
-  if (checkInput(userData, (msg) => (errMsg = msg))) {
+  if (checkRegisterInput(userData, (msg) => (errMsg = msg))) {
     try {
       await connectToDB();
       const isRegistered = await User.findOne({ phone: userData.number });
 
       if (isRegistered) {
-        return new Response(JSON.stringify({message:"This number is already registered"}), { status: 400 })
+        return new Response(
+          JSON.stringify({ message: "This number is already registered" }),
+          { status: 400 }
+        );
       } else {
-        await User.create({
+        const user = await User.create({
           name: userData.name,
           phone: userData.number,
           bloodGroup: userData.blood,
@@ -26,30 +30,27 @@ export async function POST(req: NextRequest) {
           password: await hashPassword(userData.password),
         });
 
-        return new Response(JSON.stringify({message:"Registration successful"}), { status: 201 })
+        return new Response(
+          JSON.stringify({ message: "Registration successful." }),
+          {
+            status: 201,
+            headers: {
+              "Set-Cookie": `token=${generateToken(
+                user
+              )}; path=/; HttpOnly; SameSite=Strict;`,
+            },
+          }
+        );
       }
     } catch (error) {
       console.log(error);
 
-      return new Response(JSON.stringify({message:"Something went wrong try again later"}), { status: 500 })
+      return new Response(
+        JSON.stringify({ message: "Something went wrong try again later" }),
+        { status: 500 }
+      );
     }
   } else {
-    return new Response(JSON.stringify({message:errMsg}), { status: 400 })
-  }
-}
-
-async function hashPassword(password: string): Promise<string> {
-  const saltRounds = 6;
-
-  try {
-    // Generate a salt
-    const salt = await genSalt(saltRounds);
-
-    // Hash the password using the salt
-    const hashedPassword = await hash(password, salt);
-
-    return hashedPassword;
-  } catch (error) {
-    throw new Error(`Error hashing password: ${error}`);
+    return new Response(JSON.stringify({ message: errMsg }), { status: 400 });
   }
 }

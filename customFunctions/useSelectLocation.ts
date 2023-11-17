@@ -1,4 +1,26 @@
 import { useEffect, useState } from "react";
+// const locationList = {
+//   english: {
+//     Dhaka: {},
+//     Chittagong: {},
+//     Rajshahi: {},
+//     Khulna: {},
+//     Barisal: {},
+//     Sylhet: {},
+//     Rangpur: {},
+//     Mymensingh: {},
+//   },
+//   bangla: {
+//     ঢাকা: {},
+//     চট্টগ্রাম: {},
+//     রাজশাহী: {},
+//     খুলনা: {},
+//     বরিশাল: {},
+//     সিলেট: {},
+//     রংপুর: {},
+//     ময়মনসিংহ: {},
+//   },
+// };
 
 export default function useSelectLocation() {
   const [selectedLocation, setSelectedLocation] = useState({

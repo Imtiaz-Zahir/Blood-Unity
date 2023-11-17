@@ -68,7 +68,7 @@ export default function FindDonor() {
 
       <button
         type="submit"
-        className="py-3 px-5 bg-red-600 hover:bg-blue-900 transition-all text-white rounded uppercase font-semibold flex gap-2 items-center justify-center"
+        className="py-3 whitespace-nowrap px-5 bg-red-600 hover:bg-blue-900 transition-all text-white rounded uppercase font-semibold flex gap-2 items-center justify-center"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

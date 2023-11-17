@@ -6,7 +6,7 @@ export default function page() {
   return (
     <section className="flex flex-col-reverse gap-5 md:gap-10 md:flex-row items-center px-4 sm:px-8 md:px-16 lg:px-28 py-20">
       <div className="md:w-1/2">
-        <h1 className="text-2xl font-bold lg:text-5xl">let&apos;s join together to give the gift of life.</h1>
+        <h1 className="text-2xl font-bold lg:text-5xl">Are you Looking for Blood</h1>
         <p className="text-sm mt-5 mb-10 lg:text-lg text-justify">
           We are here to help you with founding Blood. We know that Blood is
           sometimes very difficult to obtain. So our associations will help you

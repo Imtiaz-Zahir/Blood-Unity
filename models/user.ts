@@ -10,6 +10,10 @@ const userSchema = new Schema({
         unique:true,
         required:[true,"Phone number is required"]
     },
+    password:{
+        type:String,
+        required:[true,"Password is required"]
+    },
     bloodGroup:{
         type:String,
         required:[true,"Blood group is required"],

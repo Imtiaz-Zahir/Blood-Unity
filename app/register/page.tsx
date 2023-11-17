@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import useSelectLocation from "@/customFunctions/useSelectLocation";
-import checkInput from "@/customFunctions/checkInput";
+import { checkRegisterInput } from "@/customFunctions/checkInput";
 
 export default function Page() {
   const [show, setShow] = useState(false);
@@ -30,7 +30,7 @@ export default function Page() {
       password_confirm: form.password_confirm.value,
     };
 
-    if (checkInput(data, (msg) => setErr(msg))) {
+    if (checkRegisterInput(data, (msg) => setErr(msg))) {
       fetch("/api/auth/register", {
         method: "POST",
         headers: {
@@ -41,9 +41,8 @@ export default function Page() {
         .then(async (res) => {
           const data = await res.json();
           if (res.status === 201) {
-            alert(data.message);
             form.reset();
-            window.location.href = "/login";
+            window.location.href = "/profile";
           } else {
             setErr(data.message);
           }

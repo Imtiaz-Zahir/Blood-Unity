@@ -45,7 +45,7 @@ export default function Footer() {
               className="w-24 rounded-md aspect-video"
               height={54}
               width={96}
-              src={`/blogs/blog.png`}
+              src={`/blogs/blog.jpg`}
               alt="{blog.title}"
             />
             <div className="p-4">
@@ -65,7 +65,7 @@ export default function Footer() {
               className="w-24 rounded-md aspect-video"
               height={54}
               width={96}
-              src={`/blogs/blog.png`}
+              src={`/blogs/blog.jpg`}
               alt="{blog.title}"
             />
             <div className="p-4">

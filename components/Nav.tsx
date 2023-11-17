@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Nav() {
+export default function Nav({ isLogin }: { isLogin: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -13,7 +13,9 @@ export default function Nav() {
     } else {
       document.body.style.overflow = "auto";
     }
+  }, [menuOpen]);
 
+  useEffect(() => {
     // add effect if window is scrolled on load
     if (window.scrollY > 0) {
       document.getElementById("nav")?.classList.add("scroll");
@@ -25,7 +27,7 @@ export default function Nav() {
         .getElementById("nav")
         ?.classList.toggle("scroll", window.scrollY > 0);
     });
-  }, [menuOpen]);
+  }, []);
 
   const routes = [
     {
@@ -90,26 +92,18 @@ export default function Nav() {
             <Link
               onClick={() => setMenuOpen(false)}
               className="px-3 border-r hover:text-black transition-all"
-              href="/login"
+              href={isLogin ? "/profile" : "/login"}
             >
-              Login
+              {isLogin ? "Profile" : "Login"}
             </Link>
             <Link
               onClick={() => setMenuOpen(false)}
               className="px-3 border-l hover:text-black transition-all"
-              href="/register"
+              href={isLogin ? "/api/auth/logout" : "/register"}
             >
-              Register
+              {isLogin ? "Logout" : "Register"}
             </Link>
           </span>
-          {/* <span className="bg-red-600 p-2 rounded-md text-lg md:text-base font-medium text-white">
-            <Link onClick={()=>setMenuOpen(false)} className="px-3 border-r hover:text-black transition-all" href="/">
-              Profile
-            </Link>
-            <Link onClick={()=>setMenuOpen(false)} className="px-3 border-l hover:text-black transition-all" href="/">
-              Logout
-            </Link>
-          </span> */}
         </div>
       </div>
     </nav>
