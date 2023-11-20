@@ -1,5 +1,5 @@
 import React from "react";
-import { connectToDB } from "@/database/connection";
+import { connectToDB } from "@/database/connect";
 import User from "@/models/user";
 import ChangePassword from "@/components/ChangePassword";
 import { cookies } from "next/headers";
@@ -17,21 +17,27 @@ export default async function page() {
   const token = cookieStore.get("token");
   const cookieData = verifyCookie(token, true) as JWTdata;
   await connectToDB();
-  if(!cookieData) return null;
-  const userData = await User.findOne({ _id: cookieData.id })
-  
+  if (!cookieData) return null;
+
+  const userData = await User.findById(cookieData.id);
 
   return (
-    <section className="px-4 sm:px-8 md:px-16 lg:px-28 py-20 flex justify-between">
+    <section className="px-4 sm:px-8 md:px-16 lg:px-28 py-28 flex justify-center gap-28">
       <div className="w-3/4">
         <h1 className="text-3xl font-bold ">Profile</h1>
-        <div className="flex flex-col text-xl mt-4 gap-2 font-medium">
-          <p>Name : {userData.name}</p>
-          <p>Phone : {userData.phone}</p>
-          <p>Blood : {userData.bloodGroup}</p>
-          <p>Division : {userData.division}</p>
-          <p>District : {userData.district}</p>
-          <p>Upazila : {userData.upazila}</p>
+        <div className="grid grid-cols-2 text-xl mt-4 gap-4 font-medium">
+          <span>Name </span>
+          <span>: {userData.name}</span>
+          <span>Phone Number</span>
+          <span>: {userData.phone}</span>
+          <span>Blood Group</span>
+          <span>: {userData.bloodGroup}</span>
+          <span>Division </span>
+          <span>: {userData.division}</span>
+          <span>District</span>
+          <span>: {userData.district}</span>
+          <span>Upazila </span>
+          <span>: {userData.upazila}</span>
         </div>
       </div>
       <ChangePassword />

@@ -1,4 +1,4 @@
-import { connectToDB } from "@/database/connection";
+import { connectToDB } from "@/database/connect";
 import Division from "@/models/division";
 
 export async function GET() {

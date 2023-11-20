@@ -1,4 +1,4 @@
-import { connectToDB } from "@/database/connection";
+import { connectToDB } from "@/database/connect";
 import Upazila from "@/models/upazila";
 import { NextRequest } from "next/server";
 

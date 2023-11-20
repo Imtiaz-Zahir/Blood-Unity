@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { checkRegisterInput } from "@/customFunctions/checkInput";
-import { connectToDB } from "@/database/connection";
+import { connectToDB } from "@/database/connect";
 import User from "@/models/user";
 import generateToken from "@/customFunctions/generateToken";
 import hashPassword from "@/customFunctions/generateToken";

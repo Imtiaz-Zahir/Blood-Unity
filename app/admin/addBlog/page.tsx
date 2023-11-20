@@ -4,21 +4,22 @@ import React, { useState } from "react";
 
 export default function Page() {
   const [submit, setSubmit] = useState("submit");
-  const [disable, setDisable] = useState(false);
   const [content, setContent] = useState("");
 
-  async function addBlog(e: any) {
+  function addBlog(e: any) {
     e.preventDefault();
-    setDisable(true);
     setSubmit("submiting...");
-    const res = await fetch("/api/admin/blogs", {
+    fetch("/api/admin/blogs", {
       method: "POST",
       body: new FormData(e.target),
+    }).then(async (res) => {
+      const data = await res.json();
+      alert(data.message);
+      if (res.status === 201) {
+        e.target.reset();
+      }
     });
-    alert(res.status === 201 ? "Blog Added" : "Blog Not Added");
-    res.status === 201 ? e.target.reset() : null;
     setSubmit("submit");
-    setDisable(false);
   }
 
   return (
@@ -58,9 +59,9 @@ export default function Page() {
           ></textarea>
 
           <button
-            className="bg-orange-500 text-white focus:outline-none"
+            className="bg-orange-500 text-white focus:outline-none py-2"
             type="submit"
-            disabled={disable}
+            disabled={submit === "submiting..." ? true : false}
           >
             {submit}
           </button>

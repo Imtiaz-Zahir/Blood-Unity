@@ -1,4 +1,4 @@
-import { connectToDB } from "@/database/connection";
+import { connectToDB } from "@/database/connect";
 import District from "@/models/district";
 import { NextRequest } from "next/server";
 

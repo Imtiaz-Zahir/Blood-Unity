@@ -1,8 +1,12 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { connectToDB } from "@/database/connect";
+import Blog from "@/models/blog";
 
-export default function Footer() {
+export default async function Footer() {
+  await connectToDB();
+  const blogs = await Blog.find().sort({ views: "descending" }).limit(2);
   return (
     <footer className="w-full bg-[#0e0a38] px-4 sm:px-8 md:px-16 lg:px-28 text-white text-xl font-bold">
       <div className="pt-20 flex flex-col lg:flex-row gap-8">
@@ -40,46 +44,28 @@ export default function Footer() {
         </div>
         <div className="w-full rounded-xl">
           <h3 className="text-2xl my-4 font-bold">Most Popular Blogs</h3>
-          <div className="flex items-center my-2">
-            <Image
-              className="w-24 rounded-md aspect-video"
-              height={54}
-              width={96}
-              src={`/blogs/blog.jpg`}
-              alt="{blog.title}"
-            />
-            <div className="p-4">
-              <Link
-                href={`/blogs/4`}
-                className="font-bold text-sm mb-3 hover:text-red-600 transition-all"
-              >
-                Video for Blood Donor
-              </Link>
-              <p className="text-xs text-slate-500">
-                12-jan-2021
-              </p>
+          {blogs.map((blog, index) => (
+            <div key={index} className="flex items-center my-2">
+              <Image
+                className="w-24 rounded-md aspect-video"
+                height={54}
+                width={96}
+                src={`/blogs/${blog.image}`}
+                alt={blog.title}
+              />
+              <div className="p-4">
+                <Link
+                  href={`/blogs/${blog._id}`}
+                  className="font-bold text-sm mb-3 hover:text-red-600 transition-all"
+                >
+                  {blog.title}
+                </Link>
+                <p className="text-xs text-slate-500">
+                  {new Date(blog.createdAt).toLocaleDateString()}
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center my-2">
-            <Image
-              className="w-24 rounded-md aspect-video"
-              height={54}
-              width={96}
-              src={`/blogs/blog.jpg`}
-              alt="{blog.title}"
-            />
-            <div className="p-4">
-              <Link
-                href={`/blogs/4`}
-                className="font-bold text-sm mb-3 hover:text-red-600 transition-all"
-              >
-                Video for Blood Donor
-              </Link>
-              <p className="text-xs text-slate-500">
-                12-jan-2021
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
         <div className="w-full font-bold">
           <h3 className="text-2xl my-4">Contact Us</h3>

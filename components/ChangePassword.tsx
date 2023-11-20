@@ -8,6 +8,7 @@ export default function ChangePassword() {
 
   function handelSubmit(e: any) {
     e.preventDefault();
+    setError("");
     const data = {
       oldPassword: e.target.PrevPass.value,
       newPassword: e.target.newPass.value,
@@ -23,7 +24,7 @@ export default function ChangePassword() {
       })
         .then(async (res) => {
           const data = await res.json();
-          if(res.status === 200) e.target.reset();
+          if (res.status === 200) e.target.reset();
           setError(data.message);
         })
         .catch(() => setError("Something went wrong try again later"));

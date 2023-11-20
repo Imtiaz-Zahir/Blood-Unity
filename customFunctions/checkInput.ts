@@ -41,6 +41,7 @@ export function checkRegisterInput(
   }
   if (data.number.length !== 11) {
     callback("Phone number must be 11 digits");
+    return false;
   }
   if (!isAllDigits(data.number)) {
     callback("Phone number must be digits");
@@ -52,7 +53,8 @@ export function checkRegisterInput(
   }
 
   if (data.password.length < 6 || data.password.length > 20) {
-    return "Password must be 6-20 characters";
+    callback("Password must be 6-20 characters");
+    return false;
   } else {
     return true;
   }

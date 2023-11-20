@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { connectToDB } from "@/database/connection";
+import { connectToDB } from "@/database/connect";
 import User from "@/models/user";
 import { compare } from "bcrypt";
 import { checkLoginInput } from "@/customFunctions/checkInput";

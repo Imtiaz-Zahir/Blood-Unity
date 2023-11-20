@@ -4,7 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function Blog() {
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useState<
+    { image: string; title: string; id: string }[]
+  >([]);
   useEffect(() => {
     fetch("/api/admin/blogs")
       .then((res) => res.json())
@@ -21,7 +23,7 @@ export default function Blog() {
         Add Blog
       </Link>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:grid-cols-3">
-        {blogs.map((data,index) => (
+        {blogs.map((data, index) => (
           <div
             key={index}
             className="p-4 bg-cyan-50 rounded-xl max-w-[350px] mx-auto my-5"

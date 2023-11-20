@@ -12,7 +12,7 @@ export default function FindDonor() {
   } = useSelectLocation(); //custom hook
 
   return (
-    <form className="flex flex-col lg:flex-row items-center justify-center gap-5 text-xl font-semibold p-20">
+    <form className="flex flex-col lg:flex-row items-center justify-center gap-5 text-xl font-semibold py-16">
       <select
         name="divition"
         className="py-3 px-5 border-2 border-black rounded"
@@ -55,6 +55,24 @@ export default function FindDonor() {
           setSelectedLocation((prev) => ({ ...prev, upazila: e.target.value }))
         }
         value={selectedLocation.upazila}
+      >
+        <option className="hidden" value="0">
+          {selectedLocation.district ? "Select Uppazila" : "Select District First"}
+        </option>
+        {upazilas.map(({ _id, name }, index) => (
+          <option key={index} value={_id}>
+            {name}
+          </option>
+        ))}
+      </select>
+
+      <select
+        name="hospital"
+        className="py-3 px-5 border-2 border-black rounded"
+        // onChange={(e) =>
+        //   setSelectedLocation((prev) => ({ ...prev, upazila: e.target.value }))
+        // }
+        // value={selectedLocation.upazila}
       >
         <option className="hidden" value="0">
           {selectedLocation.district ? "Select Uppazila" : "Select District First"}
