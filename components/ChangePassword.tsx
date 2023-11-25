@@ -15,7 +15,7 @@ export default function ChangePassword() {
       confirmPassword: e.target.conPass.value,
     };
     if (checkChangePassword(data, (msg) => setError(msg))) {
-      fetch("/api/change_password", {
+      fetch("/api/profile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

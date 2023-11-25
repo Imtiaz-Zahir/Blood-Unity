@@ -6,7 +6,7 @@ export default function generateToken(user: any) {
       throw new Error("JWT_SECRET not defined in .env file");
     }
     const token = sign(
-      { exp: Date.now() / 1000 + 2629743, id: user._id, name: user.name },
+      { exp: Math.round(Date.now() / 1000) + 2629743, id: user._id, name: user.name,type:user.type },
       process.env.JWT_SECRET
     );
     return token;

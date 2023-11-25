@@ -1,25 +1,25 @@
 "use client";
-import React,{useState} from "react";
+import React, { useEffect, useState } from "react";
 import Blog from "./(components)/blog";
+import NewUser from "./(components)/newUser";
 
-
-const sideManu = ["New Users", "blogs"];
+const sideManu = ["Users", "blogs"];
 
 export default function Page() {
-  const [active, setActive] = useState({name: "blogs", component: <Blog/>});
+  // const [active, setActive] = useState({name: "blogs", component: <newUser/>});
 
-  const clickHandler = (m) => {
-    // setLis(m.target.innerText);
-    // const contain = m.target.innerText;
+  // const clickHandler = (m) => {
+  // setLis(m.target.innerText);
+  // const contain = m.target.innerText;
 
-    // switch (contain) {
-    //   case "blog":
-    //     setMain(<Blog/>);
-    //     break;
-    //   default:
-    //     setMain(<Course/>);
-    // }
-  };
+  // switch (contain) {
+  //   case "blog":
+  //     setMain(<Blog/>);
+  //     break;
+  //   default:
+  //     setMain(<Course/>);
+  // }
+  // };
 
   return (
     <section className=" px-4 sm:px-8 md:px-16 lg:px-28 py-20 lg:flex">
@@ -28,17 +28,17 @@ export default function Page() {
           return (
             <li
               key={index}
-              onClick={clickHandler}
-              className={`pl-2 flex items-center gap-2 cursor-pointer py-2 rounded-l-md ${
-                active.name == item ? "bg-orange-500 text-white" : "hover:bg-orange-200"
-              }`}
+              // onClick={clickHandler}
+              // className={`pl-2 flex items-center gap-2 cursor-pointer py-2 rounded-l-md ${
+              //   active.name == item ? "bg-orange-500 text-white" : "hover:bg-orange-200"
+              // }`}
             >
               {item}
             </li>
           );
         })}
       </ul>
-      {active.component}
+      <Blog />
     </section>
   );
 }

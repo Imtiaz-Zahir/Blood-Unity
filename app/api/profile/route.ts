@@ -1,6 +1,6 @@
 import { checkChangePassword } from "@/customFunctions/checkInput";
 import generateToken from "@/customFunctions/generateToken";
-import hashPassword from "@/customFunctions/generateToken";
+import hashPassword from "@/customFunctions/hashPassword";
 import verifyCookie from "@/customFunctions/verifyCookie";
 import { connectToDB } from "@/database/connect";
 import { NextRequest } from "next/server";
@@ -12,6 +12,7 @@ type JWTdata = {
   id: string;
   name: string;
   iat: number;
+  type: string;
   exp: number;
 };
 
@@ -28,14 +29,13 @@ export async function POST(req: NextRequest) {
 
     try {
       await connectToDB();
-      const user = await User.findOne({ _id:cookieData.id });
+      const user = await User.findOne({ _id: cookieData.id });
       const isMatch = await compare(data.oldPassword, user.password);
 
       if (!isMatch) {
-        return new Response(
-          JSON.stringify({ message: "Wrong old password" }),
-          { status: 400 }
-        );
+        return new Response(JSON.stringify({ message: "Wrong old password" }), {
+          status: 400,
+        });
       }
 
       const hashedPassword = await hashPassword(data.newPassword);
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
             "Set-Cookie": `token=${generateToken({
               _id: cookieData.id,
               name: cookieData.name,
-            })}; path=/; HttpOnly; SameSite=Strict;`,
+            })}; path=/; HttpOnly; SameSite=Strict;Max-Age=2592000;`, // 30 days = 2592000 seconds
           },
         }
       );
@@ -74,4 +74,24 @@ export async function POST(req: NextRequest) {
   }
 
   return new Response(JSON.stringify({ message: errMsg }), { status: 400 });
+}
+
+export async function DELETE(){
+    const cookieStore = cookies();
+    const token = cookieStore.get("token");
+    const cookieData = verifyCookie(token, true) as JWTdata | false;
+
+    if (!cookieData) return Response.redirect("/login");
+
+    try {
+        await connectToDB();
+        await User.deleteOne({_id:cookieData.id});
+        return Response.redirect("/logout");
+    } catch (error) {
+        console.log(error);
+        return new Response(
+            JSON.stringify({ message: "Something went wrong try again later" }),
+            { status: 500 }
+          );
+    }    
 }

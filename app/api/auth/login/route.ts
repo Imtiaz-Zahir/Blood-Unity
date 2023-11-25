@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { connectToDB } from "@/database/connect";
 import User from "@/models/user";
 import { compare } from "bcrypt";
@@ -19,7 +19,9 @@ export async function POST(req: NextRequest) {
           { status: 400 }
         );
       }
+      
       const isMatch = await compare(password, user.password);
+      
       if (!isMatch) {
         return new Response(
           JSON.stringify({ message: "Wrong number or password" }),
@@ -28,11 +30,15 @@ export async function POST(req: NextRequest) {
       }
       return new Response(JSON.stringify({ message: "Login successful" }), {
         headers: {
-          "Set-Cookie": `token=${generateToken(
-            user
-          )}; path=/; HttpOnly; SameSite=Strict;`,
+          "Set-Cookie": `token=${generateToken({
+            _id: user._id,
+            name: user.name,
+            type: user.type,
+          })}; path=/; HttpOnly; SameSite=Strict;Max-Age=2592000;`, // 30 days = 2592000 seconds
         },
       });
+
+      // return Response.redirect('/profile').headers.set('Set-Cookie', `token=${generateToken(user)}; path=/; HttpOnly; SameSite=Strict;`);
     } catch (error) {
       console.log(error);
       return new Response(

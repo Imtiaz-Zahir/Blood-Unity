@@ -11,13 +11,32 @@ export default function FindDonor() {
     upazilas,
   } = useSelectLocation(); //custom hook
 
+  function handleSubmit(e: any) {
+    e.preventDefault();
+    try {
+      fetch(`/api/find_donor?upazila=${selectedLocation.upazila}`)
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
-    <form className="flex flex-col lg:flex-row items-center justify-center gap-5 text-xl font-semibold py-16">
+    <form
+      className="flex flex-col lg:flex-row items-center justify-center gap-5 text-xl font-semibold py-16"
+      onSubmit={handleSubmit}
+    >
       <select
         name="divition"
         className="py-3 px-5 border-2 border-black rounded"
         onChange={(e) =>
-          setSelectedLocation((prev) => ({ ...prev, division: e.target.value,district:"",upazila:"" }))
+          setSelectedLocation((prev) => ({
+            ...prev,
+            division: e.target.value,
+            district: "",
+            upazila: "",
+          }))
         }
         value={selectedLocation.division}
         required
@@ -35,12 +54,19 @@ export default function FindDonor() {
         name="district"
         className="py-3 px-5 border-2 border-black rounded"
         onChange={(e) =>
-          setSelectedLocation((prev) => ({ ...prev, district: e.target.value,upazila:"" }))
+          setSelectedLocation((prev) => ({
+            ...prev,
+            district: e.target.value,
+            upazila: "",
+          }))
         }
         value={selectedLocation.district}
+        required
       >
         <option className="hidden" value="0">
-          {selectedLocation.division ? "Select District" : "Select Divition First"}
+          {selectedLocation.division
+            ? "Select District"
+            : "Select Divition First"}
         </option>
         {districts.map(({ _id, name }, index) => (
           <option key={index} value={_id}>
@@ -55,9 +81,12 @@ export default function FindDonor() {
           setSelectedLocation((prev) => ({ ...prev, upazila: e.target.value }))
         }
         value={selectedLocation.upazila}
+        required
       >
         <option className="hidden" value="0">
-          {selectedLocation.district ? "Select Uppazila" : "Select District First"}
+          {selectedLocation.district
+            ? "Select Uppazila"
+            : "Select District First"}
         </option>
         {upazilas.map(({ _id, name }, index) => (
           <option key={index} value={_id}>
@@ -66,7 +95,7 @@ export default function FindDonor() {
         ))}
       </select>
 
-      <select
+      {/* <select
         name="hospital"
         className="py-3 px-5 border-2 border-black rounded"
         // onChange={(e) =>
@@ -82,7 +111,7 @@ export default function FindDonor() {
             {name}
           </option>
         ))}
-      </select>
+      </select> */}
 
       <button
         type="submit"

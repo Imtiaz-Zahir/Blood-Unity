@@ -1,4 +1,5 @@
 import { verify } from "jsonwebtoken";
+
 type Token =
   | {
       name: string;
@@ -10,6 +11,7 @@ type JWTdata = {
   id: string;
   name: string;
   iat: number;
+  type: string;
   exp: number;
 };
 

@@ -27,6 +27,7 @@ export default function Nav({ isLogin }: { isLogin: boolean }) {
         .getElementById("nav")
         ?.classList.toggle("scroll", window.scrollY > 0);
     });
+    
   }, []);
 
   const routes = [
@@ -35,8 +36,8 @@ export default function Nav({ isLogin }: { isLogin: boolean }) {
       link: "/",
     },
     {
-      name: "Blood",
-      link: "/blood",
+      name: "Donor",
+      link: "/donor",
     },
     {
       name: "Blogs",

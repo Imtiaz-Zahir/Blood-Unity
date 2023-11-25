@@ -36,8 +36,8 @@ const userSchema = new Schema({
     },
     type:{
         type:String,
-        enum:["admin","user"],
-        default:"user"
+        enum:["admin","user","donor","moderator"],
+        default:"user",
     },
     varyfied:{
         type:Boolean,

@@ -10,6 +10,7 @@ export default async function Page() {
         Find a Blood Donor Near You
       </h1>
       <FindDonor />
+      
     </section>
   );
 }

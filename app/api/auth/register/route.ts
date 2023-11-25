@@ -1,9 +1,9 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { checkRegisterInput } from "@/customFunctions/checkInput";
 import { connectToDB } from "@/database/connect";
 import User from "@/models/user";
 import generateToken from "@/customFunctions/generateToken";
-import hashPassword from "@/customFunctions/generateToken";
+import hashPassword from "@/customFunctions/hashPassword";
 
 export async function POST(req: NextRequest) {
   const userData = await req.json();
@@ -35,9 +35,11 @@ export async function POST(req: NextRequest) {
           {
             status: 201,
             headers: {
-              "Set-Cookie": `token=${generateToken(
-                user
-              )}; path=/; HttpOnly; SameSite=Strict;`,
+              "Set-Cookie": `token=${generateToken({
+                _id: user._id,
+                name: user.name,
+                type: user.type,
+              })}; path=/; HttpOnly; SameSite=Strict;Max-Age=2592000;`, // 30 days = 2592000 seconds
             },
           }
         );

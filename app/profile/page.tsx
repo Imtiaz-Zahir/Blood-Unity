@@ -9,6 +9,7 @@ type JWTdata = {
   id: string;
   name: string;
   iat: number;
+  type: string;
   exp: number;
 };
 
@@ -19,7 +20,7 @@ export default async function page() {
   await connectToDB();
   if (!cookieData) return null;
 
-  const userData = await User.findById(cookieData.id);
+  const userData = await User.findById(cookieData.id).select("-password");
 
   return (
     <section className="px-4 sm:px-8 md:px-16 lg:px-28 py-28 flex justify-center gap-28">
@@ -38,6 +39,8 @@ export default async function page() {
           <span>: {userData.district}</span>
           <span>Upazila </span>
           <span>: {userData.upazila}</span>
+          <span>Role </span>
+          <span>: {userData.type}</span>
         </div>
       </div>
       <ChangePassword />

@@ -6,6 +6,7 @@ import { checkLoginInput } from "@/customFunctions/checkInput";
 export default function Page() {
   const [show, setShow] = useState(false);
   const [err, setErr] = useState("");
+  
 
   async function handleSubmit(e: any) {
     e.preventDefault();
