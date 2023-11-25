@@ -3,12 +3,16 @@ import District from "@/models/district";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const url = req.url as string;
-  const index = url?.indexOf("=");
-  if (index === -1) return new Response(JSON.stringify({message:"Invalid request"}), { status: 400 });
-
-  const divisionId = url?.slice(index + 1);
-  if (!divisionId) return new Response(JSON.stringify({message:"Invalid request"}), { status: 400 });
+  const { searchParams } = new URL(req.url);
+  const divisionId = searchParams.get("division");
+  
+  if (!divisionId)
+    return new Response(
+      JSON.stringify({ message: "Division id is required" }),
+      {
+        status: 400,
+      }
+    );
 
   try {
     await connectToDB();
@@ -16,8 +20,11 @@ export async function GET(req: NextRequest) {
     return Response.json(districts);
   } catch (error) {
     console.log(error);
-    return new Response(JSON.stringify({message:"Something went wrong try again later"}), {
-      status: 500,
-    });
+    return new Response(
+      JSON.stringify({ message: "Something went wrong try again later" }),
+      {
+        status: 500,
+      }
+    );
   }
 }

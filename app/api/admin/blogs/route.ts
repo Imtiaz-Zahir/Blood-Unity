@@ -56,3 +56,18 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    await connectToDB();
+
+    const blogs = await Blog.find().select("image title _id");
+    return new Response(JSON.stringify(blogs), { status: 200 });
+  } catch (error) {
+    console.log(error);
+    return new Response(
+      JSON.stringify({ message: "Something went wrong try again later" }),
+      { status: 500 }
+    );
+  }
+}

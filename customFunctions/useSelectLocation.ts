@@ -41,13 +41,13 @@ export default function useSelectLocation() {
       .then((data) => setLocationList({ ...locationList, divisions: data }))
       .catch(console.log);
     if (selectedLocation.division) {
-      fetch(`/api/districts?division=${selectedLocation.division}`)
+      fetch(`/api/districts?division=${selectedLocation.division}`,{next:{revalidate:3600*24}})
         .then((res) => res.json())
         .then((data) => setLocationList({ ...locationList, districts: data }))
         .catch(console.log);
     }
     if (selectedLocation.district) {
-      fetch(`/api/upazilas?district=${selectedLocation.district}`)
+      fetch(`/api/upazilas?district=${selectedLocation.district}`,{next:{revalidate:3600*24}})
         .then((res) => res.json())
         .then((data) => setLocationList({ ...locationList, upazilas: data }))
         .catch(console.log);

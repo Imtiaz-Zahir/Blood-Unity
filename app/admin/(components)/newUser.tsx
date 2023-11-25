@@ -49,7 +49,7 @@ export default function NewUser() {
 
   return (
     <div className="lg:p-6 lg:w-[80%] border-t border-slate-300">
-      <h1 className="text-2xl font-bold">New Users</h1>
+      <h1 className="text-2xl font-bold mb-5">New Users</h1>
       <table className="text-center text-lg w-full">
         <thead>
           <tr>

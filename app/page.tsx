@@ -21,7 +21,6 @@ export default function Page() {
           Find Donors
         </Link>
       </div>
-      {/* <Image className="md:w-1/2" priority src="/image.png" alt="logo" width={600} height={480} /> */}
       <div className="lg:w-2/3">
         <div>
           <Image
@@ -29,7 +28,7 @@ export default function Page() {
             priority
             height={490}
             width={870}
-            src={`/blogs/blog.jpg`}
+            src={`/blogs/1700496954474milky-way-illuminates-landscape-creates-breathtaking-beauty-generated-by-ai.jpg`}
             alt=""
           />
           <div className="md:flex my-6 font-semibold">

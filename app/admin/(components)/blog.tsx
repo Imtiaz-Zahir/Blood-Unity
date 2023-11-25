@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function Blog() {
   const [blogs, setBlogs] = useState<
-    { image: string; title: string; id: string }[]
+    { image: string; title: string; _id: string }[]
   >([]);
   useEffect(() => {
     fetch("/api/admin/blogs")
@@ -29,8 +29,8 @@ export default function Blog() {
             className="p-4 bg-cyan-50 rounded-xl max-w-[350px] mx-auto my-5"
           >
             <Image
-              className="w-full rounded-xl"
-              src={`/blog/${data.image}`}
+              className="w-full rounded-xl aspect-video"
+              src={`/blogs/${data.image}`}
               alt={data.title}
               height={300}
               width={350}
@@ -40,7 +40,7 @@ export default function Blog() {
                 {data.title}
               </p>
               <Link
-                href={`/admin/${data.id}`}
+                href={`/admin/${data._id}`}
                 className="border border-orange-500 rounded-lg text-lg font-semibold mt-4 flex items-center justify-center text-orange-500 py-2 hover:bg-orange-500 hover:text-white"
               >
                 Edit Blog

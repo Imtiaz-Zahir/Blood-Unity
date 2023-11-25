@@ -3,23 +3,13 @@ import React, { useEffect, useState } from "react";
 import Blog from "./(components)/blog";
 import NewUser from "./(components)/newUser";
 
-const sideManu = ["Users", "blogs"];
+const sideManu = [
+  { name: "Users", component: <NewUser /> },
+  { name: "blogs", component: <Blog /> },
+];
 
 export default function Page() {
-  // const [active, setActive] = useState({name: "blogs", component: <newUser/>});
-
-  // const clickHandler = (m) => {
-  // setLis(m.target.innerText);
-  // const contain = m.target.innerText;
-
-  // switch (contain) {
-  //   case "blog":
-  //     setMain(<Blog/>);
-  //     break;
-  //   default:
-  //     setMain(<Course/>);
-  // }
-  // };
+  const [active, setActive] = useState({ name: "Users", component: <NewUser /> });
 
   return (
     <section className=" px-4 sm:px-8 md:px-16 lg:px-28 py-20 lg:flex">
@@ -28,17 +18,19 @@ export default function Page() {
           return (
             <li
               key={index}
-              // onClick={clickHandler}
-              // className={`pl-2 flex items-center gap-2 cursor-pointer py-2 rounded-l-md ${
-              //   active.name == item ? "bg-orange-500 text-white" : "hover:bg-orange-200"
-              // }`}
+              onClick={() => setActive(item)}
+              className={`pl-2 flex items-center gap-2 cursor-pointer py-2 rounded-l-md ${
+                active.name == item.name
+                  ? "bg-orange-500 text-white"
+                  : "hover:bg-orange-200"
+              }`}
             >
-              {item}
+              {item.name}
             </li>
           );
         })}
       </ul>
-      <Blog />
+      {active.component}
     </section>
   );
 }
