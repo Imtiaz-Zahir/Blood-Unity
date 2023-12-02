@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { connectToDB } from "@/database/connect";
 import User from "@/models/user";
 import { compare } from "bcrypt";

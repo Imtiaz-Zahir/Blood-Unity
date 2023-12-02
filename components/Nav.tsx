@@ -2,9 +2,18 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
-export default function Nav({ isLogin }: { isLogin: boolean }) {
+export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    fetch("/api/get_token")
+      .then((res) => res.json())
+      .then((data) => (data.token ? setIsLogin(true) : setIsLogin(false)));
+  }, [pathname]);
 
   useEffect(() => {
     // stop scrolling when menu is open
@@ -27,7 +36,6 @@ export default function Nav({ isLogin }: { isLogin: boolean }) {
         .getElementById("nav")
         ?.classList.toggle("scroll", window.scrollY > 0);
     });
-    
   }, []);
 
   const routes = [

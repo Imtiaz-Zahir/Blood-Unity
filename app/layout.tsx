@@ -3,8 +3,6 @@ import { Rajdhani } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import { cookies } from "next/headers";
-import verifyCookie from "@/customFunctions/verifyCookie";
 
 const rajdhani = Rajdhani({
   subsets: ["latin"],
@@ -21,13 +19,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
-  const token = cookieStore.get("token");
 
   return (
     <html lang="en">
       <body className={rajdhani.className}>
-        <Nav isLogin={verifyCookie(token) as boolean} />
+        <Nav />
         {children}
         <Footer />
       </body>
